@@ -1,0 +1,20 @@
+.cell{
+  background-color: white;
+}
+.occupied {
+  background-color: lime;
+}
+.obstacle {
+  background-color: black;
+}
+.food {
+  background-color: red;
+}
+.fatal{
+  background-color: orange;
+}
+td {
+  width: 20px;
+  height: 20px;
+  border: 1px solid black;
+}
