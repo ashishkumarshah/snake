@@ -162,7 +162,7 @@ tailMovementHandler(px,py) {
   }
   arrowKeysHandler(event) {
     event = event || window.event;
-    console.log(e.keyCode);    
+    console.log(event.keyCode);    
   }
 }
 export default Grid;
