@@ -2,6 +2,7 @@ class Snake
 {
   constructor (initialXPosition, initialYPosition, obstacleHandler, foodHandler, endGameHandler, eatenHandler, tailMovementHandler, headMovementHandler) {
     this.head = null;
+    this.currentDirection = 40;
     this.validDirections = ['up', 'right', 'down', 'left'];
     this.obstacleHandler = obstacleHandler;
     this.foodHandler = foodHandler;
@@ -16,10 +17,13 @@ class Snake
     this.head = node;
     this.direction = this.validDirections[0];
   }
-  moveAhead () {
+  moveAhead (nextDirection) {
     let node = {};
-    node.x = this.head.x + this.getXOffset();
-    node.y = this.head.y + this.getYOffset();   
+    if (this.currentDirection) {
+      nextDirection = this.setNextDirection(nextDirection);
+    }
+    node.x = this.head.x + this.getXOffset(nextDirection);
+    node.y = this.head.y + this.getYOffset(nextDirection);   
     node.next = this.head;
     this.head = node;
     
@@ -42,6 +46,13 @@ class Snake
       console.log("Yummy!");
     }
   }
+  setNextDirection (nextDirection) {
+    if(Math.abs(this.currentDirection - nextDirection == 39) == 2) {
+      return this.currentDirection;
+    } else {
+      return nextDirection;
+    }
+  }
   notifyHeadMovement(node) {
     return this.headMovementHandler(node.x, node.y);
   }
@@ -54,11 +65,16 @@ class Snake
   isFood(head) {
     return this.foodHandler(head.x,head.y);
   }
-  getXOffset() {
+  getXOffset(nextDirection) {
+    if (nextDirection == 40)
     return 1;
+    if (nextDirection == 38) return -1;
+    else return 0;
   }
-  getYOffset() {
-    return 0;
+  getYOffset(nextDirection) {
+    if (nextDirection == 37) return -1;
+    if (nextDirection == 39) return 1;
+    else return 0;
   }
   isDead(head) {
     let obstacle = this.obstacleHandler(head.x, head.y);
@@ -76,6 +92,7 @@ class Snake
 class Grid {
   constructor(input) {
     this.grid = Array(input.length).fill([]);
+    this.nextMove = 40;
     let rowIter = 0, colIter = 0;
     for (rowIter = 0; rowIter < input.length; rowIter++) {
       this.grid[rowIter] = Array(input[rowIter].length).fill(null);
@@ -98,6 +115,7 @@ class Grid {
   }
   startListeningToDirectionInputs() {
     document.onkeypress = this.arrowKeysHandler.bind(this);
+    document.onkeyup = this.arrowKeysHandler.bind(this);
   }
   startGame() {
     console.log("New Game Started");
@@ -105,7 +123,7 @@ class Grid {
   }
   handleNextTick(){
     console.log("Next Turn");
-    this.snake.moveAhead();
+    this.snake.moveAhead(this.nextMove);
   }
   isObstacle(px,py) {
     let x = px;
@@ -127,17 +145,18 @@ class Grid {
   endGame () {
     clearInterval(this.interval);
   }
-tailMovementHandler(px,py) {
+  tailMovementHandler(px,py) {
     console.log("Trail "+px + " "+ py);
     let cell = document.getElementById(px+'-'+py);
     cell.setAttribute("class", "cell");
- }
+  }
   headMovementHandler(px,py) {
     console.log("Head Moves to "+px + " "+py);
     let cell = document.getElementById(px+'-'+py);
     cell.setAttribute("class", "occupied");
-}
+  }
   eatenHandler (px,py) {
+    this.grid[px][py] = null;
     console.log("Ate "+px + " "+ py);
     let cell = document.getElementById(px+'-'+py);
     cell.setAttribute("class", "occupied");
@@ -153,6 +172,7 @@ tailMovementHandler(px,py) {
     cell.setAttribute("class", "obstacle");
   }
   markFood(px,py) {
+    this.grid[px][py] = 0;
     let cell = document.getElementById(px+'-'+py);
     cell.setAttribute("class", "food");
   }
@@ -162,7 +182,10 @@ tailMovementHandler(px,py) {
   }
   arrowKeysHandler(event) {
     event = event || window.event;
-    console.log(event.keyCode);    
-  }
+    let keyCode = event.keyCode;
+    if (keyCode >= 37 && keyCode <=40) {
+      this.nextMove = keyCode;
+    }
+  }  
 }
 export default Grid;
