@@ -1,1 +1,324 @@
-!function(l){function n(t){if(e[t])return e[t].exports;var u=e[t]={i:t,l:!1,exports:{}};return l[t].call(u.exports,u,u.exports,n),u.l=!0,u.exports}var e={};n.m=l,n.c=e,n.d=function(l,e,t){n.o(l,e)||Object.defineProperty(l,e,{configurable:!1,enumerable:!0,get:t})},n.n=function(l){var e=l&&l.__esModule?function(){return l.default}:function(){return l};return n.d(e,"a",e),e},n.o=function(l,n){return Object.prototype.hasOwnProperty.call(l,n)},n.p="",n(n.s=0)}([function(l,n,e){"use strict";var t=e(1),u=function(l){return l&&l.__esModule?l:{default:l}}(t),i=[[1,1,1,1,1,1,1,1,1,1,1],[1,null,null,null,null,null,null,null,null,null,1],[1,null,null,null,null,null,null,null,null,null,1],[1,null,null,null,null,null,null,null,null,null,1],[1,null,null,null,null,null,null,null,null,null,1],[1,null,null,null,null,null,null,null,null,null,1],[1,null,null,null,null,null,null,null,null,null,1],[1,null,null,null,null,null,null,null,null,null,1],[1,null,null,null,null,null,null,null,null,null,1],[1,null,null,null,null,null,null,null,null,null,1],[1,null,null,null,null,null,null,null,null,null,1],[1,null,null,null,null,0,null,null,null,null,1],[1,null,null,null,null,null,null,null,null,null,1],[1,null,null,null,null,null,null,null,null,null,1],[1,null,null,null,null,0,null,null,null,null,1],[1,null,null,null,null,null,null,null,null,null,1],[1,null,null,null,null,null,null,null,null,null,1],[1,null,null,null,null,null,null,null,null,null,1],[1,1,1,1,1,1,1,1,1,1,1]];new u.default(i)},function(l,n,t){"use strict";function u(l,n){if(!(l instanceof n))throw new TypeError("Cannot call a class as a function")}Object.defineProperty(n,"__esModule",{value:!0});var i=function(){function l(l,n){for(var e=0;e<n.length;e++){var t=n[e];t.enumerable=t.enumerable||!1,t.configurable=!0,"value"in t&&(t.writable=!0),Object.defineProperty(l,t.key,t)}}return function(n,e,t){return e&&l(n.prototype,e),t&&l(n,t),n}}(),a=function(){function l(n,e,t,i,a,o,r,s){u(this,l),this.head=null,this.validDirections=["up","right","down","left"],this.obstacleHandler=t,this.foodHandler=i,this.endGameHandler=a,this.eatenHandler=o,this.tailMovementHandler=r,this.headMovementHandler=s;var d={};d.x=n,d.y=e,d.next=null,this.head=d,this.direction=this.validDirections[0]}return i(l,[{key:"moveAhead",value:function(){var l={};if(l.x=this.head.x+this.getXOffset(),l.y=this.head.y+this.getYOffset(),l.next=this.head,this.head=l,this.isFood(this.head))this.notifyEaten(this.head),console.log("Yummy!");else{if(this.notifyHeadMovement(this.head),this.isDead(this.head))return void this.notifyDead();for(var n=this.head;null!=n.next.next;)n=n.next;var e=n.next;this.notifyTailMovement(e),e=null,n.next=null}}},{key:"notifyHeadMovement",value:function(l){return this.headMovementHandler(l.x,l.y)}},{key:"notifyTailMovement",value:function(l){return this.tailMovementHandler(l.x,l.y)}},{key:"notifyEaten",value:function(l){return this.eatenHandler(l.x,l.y)}},{key:"isFood",value:function(l){return this.foodHandler(l.x,l.y)}},{key:"getXOffset",value:function(){return 1}},{key:"getYOffset",value:function(){return 0}},{key:"isDead",value:function(l){return!!this.obstacleHandler(l.x,l.y)&&(console.log("Tried to eat "+l.x+" "+l.y),!0)}},{key:"notifyDead",value:function(){this.endGameHandler()}}]),l}(),o=function(){function l(n){u(this,l),this.grid=Array(n.length).fill([]);var e=0,t=0;for(e=0;e<n.length;e++)for(this.grid[e]=Array(n[e].length).fill(null),t=0;t<n[e].length;t++)null!=n[e][t]&&1===n[e][t]?(this.grid[e][t]=1,this.markObstacle(e,t)):null!=n[e][t]&&0===n[e][t]?(this.grid[e][t]=0,this.markFood(e,t)):this.grid[e][t]=null;this.startListeningToDirectionInputs(),this.snake=new a(Math.floor(e/2),Math.floor(t/2),this.isObstacle.bind(this),this.isFood.bind(this),this.endGame.bind(this),this.eatenHandler.bind(this),this.tailMovementHandler.bind(this),this.headMovementHandler.bind(this)),this.headMovementHandler(Math.floor(e/2),Math.floor(t/2)),this.startGame()}return i(l,[{key:"startListeningToDirectionInputs",value:function(){document.onkeypress=this.arrowKeysHandler.bind(this)}},{key:"startGame",value:function(){console.log("New Game Started"),this.interval=setInterval(this.handleNextTick.bind(this),1e3)}},{key:"handleNextTick",value:function(){console.log("Next Turn"),this.snake.moveAhead()}},{key:"isObstacle",value:function(l,n){var e=l,t=n;return 1==this.grid[e][t]&&(this.markFatal(l,n),!0)}},{key:"isFood",value:function(l,n){var e=l,t=n;return 0==this.grid[e][t]}},{key:"endGame",value:function(){clearInterval(this.interval)}},{key:"eatenHandler",value:function(l,n){console.log("Ate "+l+" "+n),document.getElementById(l+"-"+n).setAttribute("class","occupied")}},{key:"tailMovementHandler",value:function(l,n){console.log("Trail "+l+" "+n),document.getElementById(l+"-"+n).setAttribute("class","cell")}},{key:"headMovementHandler",value:function(l,n){console.log("Head Moves to "+l+" "+n),document.getElementById(l+"-"+n).setAttribute("class","occupied")}},{key:"markObstacle",value:function(l,n){document.getElementById(l+"-"+n).setAttribute("class","obstacle")}},{key:"markFood",value:function(l,n){document.getElementById(l+"-"+n).setAttribute("class","food")}},{key:"markFatal",value:function(l,n){document.getElementById(l+"-"+n).setAttribute("class","fatal")}},{key:"arrowKeysHandler",value:function(l){l=l||window.event,console.log(e.keyCode)}}]),l}();n.default=o}]);
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId]) {
+/******/ 			return installedModules[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, {
+/******/ 				configurable: false,
+/******/ 				enumerable: true,
+/******/ 				get: getter
+/******/ 			});
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ })
+/************************************************************************/
+/******/ ([
+/* 0 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _grid = __webpack_require__(1);
+
+var _grid2 = _interopRequireDefault(_grid);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var gridInput = [[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], [1, null, null, null, null, null, null, null, null, null, 1], [1, null, null, null, null, null, null, null, null, null, 1], [1, null, null, null, null, null, null, null, null, null, 1], [1, null, null, null, null, null, null, null, null, null, 1], [1, null, null, null, null, null, null, null, null, null, 1], [1, null, null, null, null, null, null, null, null, null, 1], [1, null, null, null, null, null, null, null, null, null, 1], [1, null, null, null, null, null, null, null, null, null, 1], [1, null, null, null, null, null, null, null, null, null, 1], [1, null, null, null, null, null, null, null, null, null, 1], [1, null, null, null, null, 0, null, null, null, null, 1], [1, null, null, null, null, null, null, null, null, null, 1], [1, null, null, null, null, null, null, null, null, null, 1], [1, null, null, null, null, null, null, null, null, null, 1], [1, null, null, null, null, null, null, null, null, null, 1], [1, null, null, null, null, null, null, null, null, null, 1], [1, null, null, null, null, null, null, null, null, null, 1], [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]];
+var g = new _grid2.default(gridInput);
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Snake = function () {
+  function Snake(initialXPosition, initialYPosition, obstacleHandler, foodHandler, endGameHandler, eatenHandler, tailMovementHandler, headMovementHandler) {
+    _classCallCheck(this, Snake);
+
+    this.head = null;
+    this.validDirections = ['up', 'right', 'down', 'left'];
+    this.obstacleHandler = obstacleHandler;
+    this.foodHandler = foodHandler;
+    this.endGameHandler = endGameHandler;
+    this.eatenHandler = eatenHandler;
+    this.tailMovementHandler = tailMovementHandler;
+    this.headMovementHandler = headMovementHandler;
+    var node = {};
+    node.x = initialXPosition;
+    node.y = initialYPosition;
+    node.next = null;
+    this.head = node;
+    this.direction = this.validDirections[0];
+  }
+
+  _createClass(Snake, [{
+    key: 'moveAhead',
+    value: function moveAhead() {
+      var node = {};
+      node.x = this.head.x + this.getXOffset();
+      node.y = this.head.y + this.getYOffset();
+      node.next = this.head;
+      this.head = node;
+
+      if (!this.isFood(this.head)) {
+        this.notifyHeadMovement(this.head);
+        if (this.isDead(this.head)) {
+          this.notifyDead();
+          return;
+        }
+        var penultimate = this.head;
+        while (penultimate.next.next != null) {
+          penultimate = penultimate.next;
+        }
+        var lastNode = penultimate.next;
+        this.notifyTailMovement(lastNode);
+        lastNode = null;
+        penultimate.next = null;
+      } else {
+        this.notifyEaten(this.head);
+        console.log("Yummy!");
+      }
+    }
+  }, {
+    key: 'notifyHeadMovement',
+    value: function notifyHeadMovement(node) {
+      return this.headMovementHandler(node.x, node.y);
+    }
+  }, {
+    key: 'notifyTailMovement',
+    value: function notifyTailMovement(node) {
+      return this.tailMovementHandler(node.x, node.y);
+    }
+  }, {
+    key: 'notifyEaten',
+    value: function notifyEaten(head) {
+      return this.eatenHandler(head.x, head.y);
+    }
+  }, {
+    key: 'isFood',
+    value: function isFood(head) {
+      return this.foodHandler(head.x, head.y);
+    }
+  }, {
+    key: 'getXOffset',
+    value: function getXOffset() {
+      return 1;
+    }
+  }, {
+    key: 'getYOffset',
+    value: function getYOffset() {
+      return 0;
+    }
+  }, {
+    key: 'isDead',
+    value: function isDead(head) {
+      var obstacle = this.obstacleHandler(head.x, head.y);
+      if (!obstacle) {
+        return false;
+      }
+      console.log("Tried to eat " + head.x + " " + head.y);
+      return true;
+    }
+  }, {
+    key: 'notifyDead',
+    value: function notifyDead() {
+      this.endGameHandler();
+    }
+  }]);
+
+  return Snake;
+}();
+
+var Grid = function () {
+  function Grid(input) {
+    _classCallCheck(this, Grid);
+
+    this.grid = Array(input.length).fill([]);
+    var rowIter = 0,
+        colIter = 0;
+    for (rowIter = 0; rowIter < input.length; rowIter++) {
+      this.grid[rowIter] = Array(input[rowIter].length).fill(null);
+      for (colIter = 0; colIter < input[rowIter].length; colIter++) {
+        if (input[rowIter][colIter] != null && input[rowIter][colIter] === 1) {
+          this.grid[rowIter][colIter] = 1;
+          this.markObstacle(rowIter, colIter);
+        } else if (input[rowIter][colIter] != null && input[rowIter][colIter] === 0) {
+          this.grid[rowIter][colIter] = 0;
+          this.markFood(rowIter, colIter);
+        } else {
+          this.grid[rowIter][colIter] = null;
+        }
+      }
+    }
+    this.startListeningToDirectionInputs();
+    this.snake = new Snake(Math.floor(rowIter / 2), Math.floor(colIter / 2), this.isObstacle.bind(this), this.isFood.bind(this), this.endGame.bind(this), this.eatenHandler.bind(this), this.tailMovementHandler.bind(this), this.headMovementHandler.bind(this));
+    this.headMovementHandler(Math.floor(rowIter / 2), Math.floor(colIter / 2));
+    this.startGame();
+  }
+
+  _createClass(Grid, [{
+    key: 'startListeningToDirectionInputs',
+    value: function startListeningToDirectionInputs() {
+      document.onkeypress = this.arrowKeysHandler.bind(this);
+    }
+  }, {
+    key: 'startGame',
+    value: function startGame() {
+      console.log("New Game Started");
+      this.interval = setInterval(this.handleNextTick.bind(this), 1000);
+    }
+  }, {
+    key: 'handleNextTick',
+    value: function handleNextTick() {
+      console.log("Next Turn");
+      this.snake.moveAhead();
+    }
+  }, {
+    key: 'isObstacle',
+    value: function isObstacle(px, py) {
+      var x = px;
+      var y = py;
+      if (this.grid[x][y] == 1) {
+        this.markFatal(px, py);
+        return true;
+      }
+      return false;
+    }
+  }, {
+    key: 'isFood',
+    value: function isFood(px, py) {
+      var x = px;
+      var y = py;
+      if (this.grid[x][y] == 0) {
+        return true;
+      }
+      return false;
+    }
+  }, {
+    key: 'endGame',
+    value: function endGame() {
+      clearInterval(this.interval);
+    }
+  }, {
+    key: 'tailMovementHandler',
+    value: function tailMovementHandler(px, py) {
+      console.log("Trail " + px + " " + py);
+      var cell = document.getElementById(px + '-' + py);
+      cell.setAttribute("class", "cell");
+    }
+  }, {
+    key: 'headMovementHandler',
+    value: function headMovementHandler(px, py) {
+      console.log("Head Moves to " + px + " " + py);
+      var cell = document.getElementById(px + '-' + py);
+      cell.setAttribute("class", "occupied");
+    }
+  }, {
+    key: 'eatenHandler',
+    value: function eatenHandler(px, py) {
+      console.log("Ate " + px + " " + py);
+      var cell = document.getElementById(px + '-' + py);
+      cell.setAttribute("class", "occupied");
+      var unoccupiedCells = document.getElementsByClassName("cell");
+      var unoccupiedCellsCount = unoccupiedCells.length;
+      var randomUnoccupiedCell = Math.floor(Math.random() * unoccupiedCellsCount);
+      var nextFoodCellXY = unoccupiedCells[randomUnoccupiedCell].id.split('-');
+      this.markFood(nextFoodCellXY[0], nextFoodCellXY[1]);
+    }
+  }, {
+    key: 'markObstacle',
+    value: function markObstacle(px, py) {
+      var cell = document.getElementById(px + '-' + py);
+      cell.setAttribute("class", "obstacle");
+    }
+  }, {
+    key: 'markFood',
+    value: function markFood(px, py) {
+      var cell = document.getElementById(px + '-' + py);
+      cell.setAttribute("class", "food");
+    }
+  }, {
+    key: 'markFatal',
+    value: function markFatal(px, py) {
+      var cell = document.getElementById(px + '-' + py);
+      cell.setAttribute("class", "fatal");
+    }
+  }, {
+    key: 'arrowKeysHandler',
+    value: function arrowKeysHandler(event) {
+      event = event || window.event;
+      console.log(e.keyCode);
+    }
+  }]);
+
+  return Grid;
+}();
+
+exports.default = Grid;
+
+/***/ })
+/******/ ]);
+//# sourceMappingURL=main.js.map

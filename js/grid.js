@@ -127,20 +127,26 @@ class Grid {
   endGame () {
     clearInterval(this.interval);
   }
-  eatenHandler (px,py) {
-    console.log("Ate "+px + " "+ py);
-    let cell = document.getElementById(px+'-'+py);
-    cell.setAttribute("class", "occupied");
-  }
-  tailMovementHandler(px,py) {
+tailMovementHandler(px,py) {
     console.log("Trail "+px + " "+ py);
     let cell = document.getElementById(px+'-'+py);
     cell.setAttribute("class", "cell");
-  }
+ }
   headMovementHandler(px,py) {
     console.log("Head Moves to "+px + " "+py);
     let cell = document.getElementById(px+'-'+py);
     cell.setAttribute("class", "occupied");
+}
+  eatenHandler (px,py) {
+    console.log("Ate "+px + " "+ py);
+    let cell = document.getElementById(px+'-'+py);
+    cell.setAttribute("class", "occupied");
+    let unoccupiedCells = document.getElementsByClassName("cell");
+    let unoccupiedCellsCount = unoccupiedCells.length;
+    let randomUnoccupiedCell = Math.floor(Math.random()*unoccupiedCellsCount);
+    let nextFoodCellXY = unoccupiedCells[randomUnoccupiedCell].id.split('-');
+    this.markFood(nextFoodCellXY[0],nextFoodCellXY[1]);
+    
   }
   markObstacle(px,py) {
     let cell = document.getElementById(px+'-'+py);
