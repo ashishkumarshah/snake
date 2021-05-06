@@ -8,6 +8,7 @@ class Grid {
     this.score = 0;
     this.directions = ['left','up','right','down'];
     this.nextDirection = this.directions[3];
+    this.currentDirection = this.nextDirection;
     this.offsetMapping = {
       'up' : {
         'x' : -1,
@@ -96,7 +97,13 @@ class Grid {
   handleNextTick() {
     console.log("Evaluating Next Turn");
     var currentHead = this.snake.getHeadPosition();
-    var nextOffsets = this.offsetMapping[this.nextDirection];
+    var nextOffsets = {};
+    if (this.isTurnAllowed()) {
+    	nextOffsets = this.offsetMapping[this.nextDirection];
+    } else {
+    	nextOffsets = this.offsetMapping[this.currentDirection];
+    	this.nextDirection = this.currentDirection;
+    }
     var nextX = currentHead.x + nextOffsets.x;
     var nextY = currentHead.y + nextOffsets.y;
     if (this.isObstacle(nextX,nextY) || this.isBite(nextX,nextY)) {
@@ -121,7 +128,34 @@ class Grid {
       this.handleTailMovement(oldTail.x,oldTail.y);
     }
     this.currentSnakeBody = this.snake.getBody();
+    this.currentDirection = this.nextDirection;
     setTimeout(this.handleNextTick.bind(this), this.speed);
+  }
+  
+  isTurnAllowed () {
+  	switch (this.currentDirection) {
+  		case 'up':
+  			if (this.nextDirection == 'down') {
+  				return false;
+  			}
+  		break;
+  		case 'down':
+  			if (this.nextDirection == 'up') {
+  				return false;
+  			}
+  		break;
+  		case 'left':
+  			if (this.nextDirection == 'right') {
+  				return false;
+  			}
+  		break;
+  		case 'right':
+  			if (this.nextDirection == 'left') {
+  				return false;
+  			}
+  		break;
+  	}
+  	return true;
   }
 
 
